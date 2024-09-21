@@ -1,0 +1,37 @@
+const { Client, Intents } = require('discord.js');
+
+// Array to store your bot tokens
+const botTokens = [
+    'BOT_TOKEN_1', // Replace with your first bot token
+    'BOT_TOKEN_2', // Replace with your second bot token
+    'BOT_TOKEN_3'  // Add more tokens if you need
+];
+
+// Create a function to initialize a bot
+function startBot(token) {
+    const client = new Client({
+        intents: [
+            Intents.FLAGS.GUILDS,
+            Intents.FLAGS.GUILD_MESSAGES,
+            Intents.FLAGS.DIRECT_MESSAGES
+        ],
+        partials: ['CHANNEL'] // For handling DMs
+    });
+
+    client.once('ready', () => {
+        console.log(`Logged in as ${client.user.tag}!`);
+    });
+
+    client.on('messageCreate', message => {
+        if (message.content === '!ping') {
+            message.channel.send('Pong!');
+        }
+    });
+
+    client.login(token).catch(err => {
+        console.error(`Error logging in bot with token ${token}:`, err);
+    });
+}
+
+// Loop through each bot token and start each bot
+botTokens.forEach(token => startBot(token));
